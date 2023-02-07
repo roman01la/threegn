@@ -3,6 +3,6 @@
 yarn build
 rm -rf www
 mkdir www
-cp -r dist/main.js index.html inter.css decals.glb whats-new fonts defaults resources/* .vercel www/
+cp -r dist/main.js whats-new fonts defaults resources/* .vercel www/
 cd www
 vercel deploy --prod

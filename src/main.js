@@ -198,9 +198,10 @@ Promise.all([
   fetch("/defaults/nodes.json").then((r) => r.json()),
   fetch("/whats-new/latest.md").then((r) => r.text()),
   fetch("/defaults/default_project.json").then((r) => r.json()),
+  fetch("/demo1.json").then((r) => r.json()),
 ])
-  .then(([nodes, text, default_project]) => {
-    window.default_project = default_project;
+  .then(([nodes, text, default_project, demo]) => {
+    window.default_project = demo;
     if (!localStorage.getItem("welcome-message")) {
       const root = ReactDOM.createRoot(document.getElementById("modals"));
       root.render(<WhatsNewModal text={text} onClose={() => root.unmount()} />);
