@@ -16,7 +16,7 @@ module.exports = {
   },
   devtool: DEV ? "inline-source-map" : undefined,
   devServer: {
-    static: "./",
+    static: ["./", "./resources"],
   },
   module: {
     rules: [
