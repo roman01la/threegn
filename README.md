@@ -15,6 +15,9 @@ Procedural 3D graphics editor for the web
 yarn dev
 ```
 
+## Resources
+- a blog post [ThreeGN devlog 1](https://www.romanliutikov.com/blog/threegn-1.html)
+
 ## Note
 
 The project is not actively maintained, most certainly there's a lot of bugs and a bunch of nodes are missing. Yet the code here can serve as a foundation and inspiration. The best way to port remaining geo nodes is to read Blender's source.
