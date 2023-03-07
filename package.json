@@ -2,8 +2,8 @@
   "name": "geo_three",
   "version": "1.0.0",
   "scripts": {
-    "dev": "DEBUG=1 webpack serve --mode='development'",
-    "build": "DEBUG=0 webpack --mode='production'"
+    "dev": "set DEBUG=1 && webpack serve --mode=development",
+    "build": "set DEBUG=0 && webpack --mode=production"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
