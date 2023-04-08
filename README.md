@@ -2,6 +2,10 @@
 
 Procedural 3D graphics editor for the web
 
+_If you like what I do, consider supporting my work via donation_
+
+[![](https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg)](https://www.buymeacoffee.com/romanliutikov)
+
 ## Contents
 
 - Blender script to export geo nodes as JSON [src/addon/export.py](https://github.com/roman01la/threegn/blob/main/src/addon/export.py)
