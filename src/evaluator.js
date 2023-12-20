@@ -77,7 +77,7 @@ const nodeTypeToFn = {
 
   GROUP_OUTPUT: applyNode(n.groupOutput, [0]),
   VIEWER: applyNode(n.viewer, [0]),
-  TRANSFORM: applyNode(n.transform, [0, 1, 2, 3]),
+  TRANSFORM_GEOMETRY: applyNode(n.transform, [0, 1, 2, 3]),
   INSTANCE_ON_POINTS: applyNode(n.instanceOnPoints, [0, 2, 5, 6]),
   POINTS: applyNode(n.points, [0, 1, 2]),
 

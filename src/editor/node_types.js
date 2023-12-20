@@ -34,7 +34,7 @@ export const nodeTypes = {
   ],
   Geometry: [
     { name: "Join Geometry", type: "JOIN_GEOMETRY" },
-    { name: "Transform", type: "TRANSFORM" },
+    { name: "Transform Geometry", type: "TRANSFORM_GEOMETRY" },
     { name: "Bounding Box", type: "BOUNDING_BOX" },
   ],
   Material: [{ name: "Set Material", type: "SET_MATERIAL" }],
@@ -94,7 +94,7 @@ export const nodeComponentTypes = {
     outputs: [0],
   }),
   JOIN_GEOMETRY: createNodeComponent({ inputs: [0], outputs: [0] }),
-  TRANSFORM: createNodeComponent({ inputs: [0, 1, 2, 3], outputs: [0] }),
+  TRANSFORM_GEOMETRY: createNodeComponent({ inputs: [0, 1, 2, 3], outputs: [0] }),
   INSTANCE_ON_POINTS: createNodeComponent({
     inputs: [0, 2, 5, 6],
     outputs: [0],
