@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ADDITION, Brush, Evaluator } from 'three-bvh-csg';
+import { ADDITION,DIFFERENCE,SUBTRACTION,INTERSECTION, Brush, Evaluator } from 'three-bvh-csg';
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 // const ThreeBSP = require('three-js-csg')(THREE);
 
@@ -452,12 +452,7 @@ export class JoinGeometry {
           geos.push(cm_geo);
         }
         
-          // let tobe_joined_geometry = new Brush(geometry);
-          // tobe_joined_geometry.updateMatrixWorld();
-          //   // console.log(tobe_joined_geometry);
-          // const evaluator = new Evaluator();
-          // joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, ADDITION );
-        
+
         }
         console.log(geos);
 
@@ -466,15 +461,68 @@ export class JoinGeometry {
     }
   }
 }
+
+function unionGeometries(geos){
+  var joined_geometry = new Brush(geos[0]);
+  joined_geometry.updateMatrixWorld();
+  const evaluator = new Evaluator();
+  for (let i = 1; i < geos.length; i++) {
+    let tobe_joined_geometry = new Brush(geos[i]);
+    tobe_joined_geometry.updateMatrixWorld();
+    
+    console.log(joined_geometry,tobe_joined_geometry);
+            
+    joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, ADDITION );
+  }
+  return joined_geometry.geometry;
+}
+
+
+function differanceGeometries(geo,geos){
+  var joined_geometry = new Brush(geo);
+  joined_geometry.updateMatrixWorld();
+
+  const evaluator = new Evaluator();
+  for (let i = 0; i < geos.length; i++) {
+    let tobe_joined_geometry = new Brush(geos[i]);
+    tobe_joined_geometry.updateMatrixWorld();
+    
+    console.log(joined_geometry,tobe_joined_geometry);
+            
+    joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, SUBTRACTION );
+  }
+  return joined_geometry.geometry;
+}
+
+function intersectGeometries(geos){
+    var joined_geometry = new Brush(geos[0]);
+    joined_geometry.updateMatrixWorld();
+    const evaluator = new Evaluator();
+    for (let i = 1; i < geos.length; i++) {
+      let tobe_joined_geometry = new Brush(geos[i]);
+      tobe_joined_geometry.updateMatrixWorld();
+      
+      console.log(joined_geometry,tobe_joined_geometry);
+              
+      joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, INTERSECTION );
+    }
+    return joined_geometry.geometry;
+  }
+
 export const joinGeometry = (geometries) => new JoinGeometry(geometries);
 
 // Geometry operations
 
-export class MeshBoolean {
-  constructor(sidx, [mesh_1, mesh_2, self_intersection, hole_tolerant]) {
+export class MeshBooleanUnion {
+  constructor( mesh_1, mesh_2, self_intersection, hole_tolerant) {
+
+    // console.log("constr mesh 1",mesh_1, "mesh 2",mesh_2,"mesh self int", self_intersection, "mesh hole tol",hole_tolerant)
+
     Object.assign(this, { mesh_1, mesh_2, self_intersection, hole_tolerant });
   }
   compute() {
+
+    // console.log("mesh 1",this.mesh_1, "mesh 2",this.mesh_2,"mesh self int", this.self_intersection, "mesh hole tol",this.hole_tolerant)
 
     const geos = [];
   
@@ -487,11 +535,112 @@ export class MeshBoolean {
   
           if(cm_geo.isInstancedBufferGeometry)
           {
-            geos.push(convertInstancedToGeoemtry(cm_geo));
+            let geometry = convertInstancedToGeoemtry(cm_geo);
+            geometry.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            geos.push(geometry);
           }
           else
           {
-            delete cm_geo.attributes['uv'];
+            // delete cm_geo.attributes['uv'];
+            geos.push(cm_geo);
+          }
+          
+          }
+          // console.log(geos);
+          
+          const joined_geometry = unionGeometries( geos );
+          // const joined_geometry = BufferGeometryUtils.mergeGeometries( geos );
+        return joined_geometry;
+      }
+    }
+}
+export const meshBooleanUnion = (...args) => { 
+  // console.log(args,'args');
+  return new MeshBooleanUnion(args[0],args[1],args[2],args[3])};
+
+  
+export class MeshBooleanIntersect {
+  constructor( mesh_1, mesh_2, self_intersection, hole_tolerant) {
+
+    // console.log("constr mesh 1",mesh_1, "mesh 2",mesh_2,"mesh self int", self_intersection, "mesh hole tol",hole_tolerant)
+
+    Object.assign(this, { mesh_1, mesh_2, self_intersection, hole_tolerant });
+  }
+  compute() {
+
+    // console.log("mesh 1",this.mesh_1, "mesh 2",this.mesh_2,"mesh self int", this.self_intersection, "mesh hole tol",this.hole_tolerant)
+
+    const geos = [];
+  
+      if(this.mesh_2.length > 0) {
+  
+        
+        for (let i = 0; i < this.mesh_2.length; i++) {
+  
+          let cm_geo = this.mesh_2[i].compute();
+  
+          if(cm_geo.isInstancedBufferGeometry)
+          {
+            let geometry = convertInstancedToGeoemtry(cm_geo);
+            geometry.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            geos.push(geometry);
+          }
+          else
+          {
+            // delete cm_geo.attributes['uv'];
+            geos.push(cm_geo);
+          }
+          
+          }
+          // console.log(geos);
+          
+          const joined_geometry = intersectGeometries( geos );
+          // const joined_geometry = BufferGeometryUtils.mergeGeometries( geos );
+        return joined_geometry;
+      }
+    }
+}
+export const meshBooleanIntersect = (...args) => { 
+  // console.log(args,'args');
+  return new MeshBooleanIntersect(args[0],args[1],args[2],args[3])};
+
+  
+export class MeshBooleanDifferance {
+  constructor( mesh_1, mesh_2, self_intersection, hole_tolerant) {
+
+    // console.log("constr mesh 1",mesh_1, "mesh 2",mesh_2,"mesh self int", self_intersection, "mesh hole tol",hole_tolerant)
+
+    Object.assign(this, { mesh_1, mesh_2, self_intersection, hole_tolerant });
+  }
+  compute() {
+
+    const geos = [];
+    
+    let cm_geo = this.mesh_1.compute();
+    let parent_geo = cm_geo;
+  
+    if(cm_geo.isInstancedBufferGeometry)
+    {
+      parent_geo=convertInstancedToGeoemtry(cm_geo);
+      parent_geo.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            
+    }
+
+      if(this.mesh_2.length > 0) {
+        
+        for (let i = 0; i < this.mesh_2.length; i++) {
+  
+          let cm_geo = this.mesh_2[i].compute();
+  
+          if(cm_geo.isInstancedBufferGeometry)
+          {
+            let geometry =convertInstancedToGeoemtry(cm_geo);
+            geometry.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            geos.push(geometry);
+          }
+          else
+          {
+            // delete cm_geo.attributes['uv'];
             geos.push(cm_geo);
           }
           
@@ -502,14 +651,16 @@ export class MeshBoolean {
             // joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, ADDITION );
           
           }
-          console.log(geos);
-  
-          const joined_geometry = BufferGeometryUtils.mergeGeometries( geos );
+          // console.log(geos);
+
+          const joined_geometry = differanceGeometries(parent_geo, geos );
         return joined_geometry;
       }
     }
 }
-export const meshBoolean = (...args) => new MeshBoolean(...args);
+export const meshBooleanDifferance = (...args) => { 
+  console.log(args,'args');
+  return new MeshBooleanDifferance(args[0],args[1],args[2],args[3])};
 
 
 // Curve

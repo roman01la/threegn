@@ -127,10 +127,28 @@ const nodeTypeToFn = {
 
   // nodes with multiple inputs per socket
   JOIN_GEOMETRY: (node) =>
-    n.joinGeometry(readValue(node, 0).map((n) => _evaluateNode(n))),
+    n.joinGeometry(readValue(node, 0).map((nd) => _evaluateNode(nd))),
+  
+  MESH_BOOLEAN: (node) =>{
+    console.log(node,"...");
+    return _evaluateNode([{ ...node, type: `MESH_BOOLEAN/${node.operation}` }, 0])},
+  "MESH_BOOLEAN/UNION": (node) =>
+  n.meshBooleanUnion(_evaluateNode(readValue(node, 0)),readValue(node, 1).map((nd) => _evaluateNode(nd)),_evaluateNode(readValue(node, 2)),_evaluateNode(readValue(node, 3))),
+  "MESH_BOOLEAN/INTERSECT": (node) =>
+  n.meshBooleanIntersect(_evaluateNode(readValue(node, 0)),readValue(node, 1).map((nd) => _evaluateNode(nd)),_evaluateNode(readValue(node, 2)),_evaluateNode(readValue(node, 3))),
+  "MESH_BOOLEAN/DIFFERENCE": (node) =>
+  n.meshBooleanDifferance(_evaluateNode(readValue(node, 0)),readValue(node, 1).map((nd) => _evaluateNode(nd)),_evaluateNode(readValue(node, 2)),_evaluateNode(readValue(node, 3))),
 
-  // MESH_BOOLEAN: (node) =>
-  //   n.meshBoolean(readValue(node, 0).map((n) => _evaluateNode(n))),
+  //   console.log(node);
+  //   let node_inps = [_evaluateNode(),[readValue(node, 1).map((n) => _evaluateNode(n))],node.inputs[2],node.inputs[3]]
+  //   console.log(node_inps,"regaoirhguoh");
+
+  //   return n.meshBooleanUnion(...node)
+  // },
+  // "MESH_BOOLEAN/DIFFERENCE": applyNode(n.meshBooleanUnion, [0, 1, 2, 3]),
+  // // MESH_BOOLEAN: (node) =>
+  // //   n.meshBoolean(readValue(node, 0).map((n) => _evaluateNode(n))),
+
 };
 
 function _evaluateNode([node, sidx]) {

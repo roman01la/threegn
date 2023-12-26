@@ -35,6 +35,7 @@ export const nodeTypes = {
   ],
   Geometry: [
     { name: "Join Geometry", type: "JOIN_GEOMETRY" },
+    { name: "Mesh Boolean", type: "MESH_BOOLEAN" },
     { name: "Transform Geometry", type: "TRANSFORM_GEOMETRY" },
     { name: "Bounding Box", type: "BOUNDING_BOX" },
   ],
@@ -99,6 +100,10 @@ export const nodeComponentTypes = {
     outputs: [0],
   }),
   JOIN_GEOMETRY: createNodeComponent({ inputs: [0], outputs: [0] }),
+
+  // MATH: createNodeComponent({ inputs: [0, 1, 2], outputs: [0] }),
+
+  MESH_BOOLEAN: createNodeComponent({ inputs: [0, 1, 2, 3], outputs: [0] }),
   TRANSFORM_GEOMETRY: createNodeComponent({ inputs: [0, 1, 2, 3], outputs: [0] }),
   INSTANCE_ON_POINTS: createNodeComponent({
     inputs: [0, 2, 5, 6],
