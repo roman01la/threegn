@@ -128,6 +128,9 @@ const nodeTypeToFn = {
   // nodes with multiple inputs per socket
   JOIN_GEOMETRY: (node) =>
     n.joinGeometry(readValue(node, 0).map((n) => _evaluateNode(n))),
+
+  // MESH_BOOLEAN: (node) =>
+  //   n.meshBoolean(readValue(node, 0).map((n) => _evaluateNode(n))),
 };
 
 function _evaluateNode([node, sidx]) {

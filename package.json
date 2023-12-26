@@ -22,6 +22,9 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "three": "^0.159.0"
+    "@react-three/csg": "^3.1.0",
+    "three": "^0.159.0",
+    "three-bvh-csg": "^0.0.15",
+    "three-js-csg": "^72.0.0"
   }
 }

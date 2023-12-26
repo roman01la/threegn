@@ -1,5 +1,8 @@
 import * as THREE from "three";
+import { ADDITION, Brush, Evaluator } from 'three-bvh-csg';
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
+// const ThreeBSP = require('three-js-csg')(THREE);
+
 
 const DEG2RAD = Math.PI / 180;
 const RAD2DEG = 180 / Math.PI;
@@ -355,22 +358,159 @@ export class MeshPrimitiveGrid {
 
 export const meshPrimitiveGrid = (...args) => new MeshPrimitiveGrid(...args);
 
+
+const randomizeMatrix = function () {
+
+  const position = new THREE.Vector3();
+  const quaternion = new THREE.Quaternion();
+  const scale = new THREE.Vector3();
+
+  return function ( matrix ) {
+
+    position.x = Math.random() * 40 - 20;
+    position.y = Math.random() * 40 - 20;
+    position.z = Math.random() * 40 - 20;
+
+    quaternion.random();
+
+    scale.x = scale.y = scale.z = Math.random() * 1;
+
+    matrix.compose( position, quaternion, scale );
+
+  };
+
+}();
+
 // Geometry operations
+function convertInstancedToGeoemtry(instances) {
+
+  const geometries = [];
+
+
+  let translation = instances.getAttribute("translation");
+  let rotation = instances.getAttribute("rotation");
+  let scale = instances.getAttribute("scale");
+  
+  // console.log(translation);
+
+
+  for ( let i = 0; i < rotation.count; i ++ ) {
+
+    // const matrix = new THREE.Matrix4();
+
+    // randomizeMatrix( matrix );
+
+    // console.log(instances);
+
+    var prototype = new THREE.BufferGeometry();
+
+    
+    prototype.setAttribute("position",instances.getAttribute("position").clone());
+    prototype.setIndex(instances.getIndex());
+
+    
+    prototype.translate(translation.array[i*3],translation.array[i*3+1],translation.array[i*3+2]);
+    // prototype.translate(i*0.1,0,0);
+
+    // prototype.rota(rotation.array[i*3],rotation.array[i*3+1],rotation.array[i*3+2]);
+    // prototype.translate(scale.array[i*3],scale.array[i*3+1],scale.array[i*3+2]);
+
+    prototype.computeVertexNormals()
+    
+
+    geometries.push( prototype );
+
+  }
+  
+  const mergedGeometry = BufferGeometryUtils.mergeGeometries( geometries );
+
+  return mergedGeometry;
+}
 
 export class JoinGeometry {
   constructor(geometries) {
     this.geometries = geometries;
   }
   compute() {
-    if (this.geometries.length > 0) {
-      return BufferGeometryUtils.mergeBufferGeometries(
-        this.geometries.map((g) => g.compute()),
-        false
-      );
+
+  const geos = [];
+
+    if(this.geometries.length > 0) {
+
+      
+      for (let i = 0; i < this.geometries.length; i++) {
+
+        let cm_geo = this.geometries[i].compute();
+
+        if(cm_geo.isInstancedBufferGeometry)
+        {
+          geos.push(convertInstancedToGeoemtry(cm_geo));
+        }
+        else
+        {
+          delete cm_geo.attributes['uv'];
+          geos.push(cm_geo);
+        }
+        
+          // let tobe_joined_geometry = new Brush(geometry);
+          // tobe_joined_geometry.updateMatrixWorld();
+          //   // console.log(tobe_joined_geometry);
+          // const evaluator = new Evaluator();
+          // joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, ADDITION );
+        
+        }
+        console.log(geos);
+
+        const joined_geometry = BufferGeometryUtils.mergeGeometries( geos );
+      return joined_geometry;
     }
   }
 }
 export const joinGeometry = (geometries) => new JoinGeometry(geometries);
+
+// Geometry operations
+
+export class MeshBoolean {
+  constructor(sidx, [mesh_1, mesh_2, self_intersection, hole_tolerant]) {
+    Object.assign(this, { mesh_1, mesh_2, self_intersection, hole_tolerant });
+  }
+  compute() {
+
+    const geos = [];
+  
+      if(this.mesh_2.length > 0) {
+  
+        
+        for (let i = 0; i < this.mesh_2.length; i++) {
+  
+          let cm_geo = this.mesh_2[i].compute();
+  
+          if(cm_geo.isInstancedBufferGeometry)
+          {
+            geos.push(convertInstancedToGeoemtry(cm_geo));
+          }
+          else
+          {
+            delete cm_geo.attributes['uv'];
+            geos.push(cm_geo);
+          }
+          
+            // let tobe_joined_geometry = new Brush(geometry);
+            // tobe_joined_geometry.updateMatrixWorld();
+            //   // console.log(tobe_joined_geometry);
+            // const evaluator = new Evaluator();
+            // joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, ADDITION );
+          
+          }
+          console.log(geos);
+  
+          const joined_geometry = BufferGeometryUtils.mergeGeometries( geos );
+        return joined_geometry;
+      }
+    }
+}
+export const meshBoolean = (...args) => new MeshBoolean(...args);
+
 
 // Curve
 export class CurveToMesh {
