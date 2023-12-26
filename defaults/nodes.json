@@ -471,6 +471,81 @@
         ]
     },
     {
+        "name": "Line",
+        "label": "Line",
+        "default_label": "Line",
+        "type": "MESH_PRIMITIVE_LINE",
+        "inputs": [
+            
+            {
+                "name": "Count",
+                "identifier": "Count",
+                "type": "INT",
+                "links": [],
+                "display_shape": "CIRCLE",
+                "is_multi_input": false,
+                "value": 2
+            },
+            {
+                "display_shape": "CIRCLE",
+                "identifier": "Resolution",
+                "is_multi_input": false,
+                "links": [],
+                "name": "Resolution",
+                "type": "VALUE",
+                "value": 1.0
+            },
+            {
+                "name": "Start Location",
+                "identifier": "Start Location",
+                "type": "VECTOR",
+                "display_shape": "CIRCLE",
+                "links": [],
+                "is_multi_input": false,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "name": "Offset",
+                "identifier": "Offset",
+                "type": "VECTOR",
+                "links": [],
+                "display_shape": "CIRCLE",
+                "is_multi_input": false,
+                "value": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        ],
+        "outputs": [
+            {
+                "name": "Mesh",
+                "identifier": "Mesh",
+                "type": "GEOMETRY",
+                "links": [],
+                "display_shape": "CIRCLE"
+            }
+        ],
+        "color": [
+            0.6079999804496765,
+            0.6079999804496765,
+            0.6079999804496765
+        ],
+        "location": [
+            373.784912109375,
+            335.0764465332031
+        ],
+        "dimensions": [
+            280.0,
+            402.0
+        ]
+    },
+    {
         "name": "Cylinder",
         "label": "",
         "default_label": "Cylinder",

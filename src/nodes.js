@@ -266,6 +266,36 @@ export class MeshPrimitiveCube {
 
 export const meshPrimitiveCube = (...args) => new MeshPrimitiveCube(...args);
 
+// Mesh primitives
+export class MeshPrimitiveLine {
+  constructor(sidx, [count,resolution,start_location,offset]) {
+    Object.assign(this, { count,resolution,start_location,offset });
+  }
+  compute() {
+    const cn = this.count.compute();
+    const rs = this.resolution.compute();
+
+    const [sx, sy, sz] = this.start_location.compute();
+    const [ex, ey, ez] = this.offset.compute();
+
+    const points = [];
+
+    for (let i = 0; i < cn; i++) {
+      let point =  new THREE.Vector3( (((ex*i)+(sx*(cn-1-i)))/(cn-1)), (((ey*i)+(sy*(cn-1-i)))/(cn-1)),(((ez*i)+(sz*(cn-1-i)))/(cn-1))) ;
+      console.log(point);
+      points.push(point );
+      // points.push( new THREE.Vector3( ex, ey, ez ) );
+    }
+    
+    const geometry = new THREE.BufferGeometry().setFromPoints( points );
+    
+    return geometry;
+  }
+}
+
+export const meshPrimitiveLine = (...args) => new MeshPrimitiveLine(...args);
+
+
 class MeshPrimitiveCylinder {
   constructor(sidx, [vertices, sideSegments, fillSegments, radius, depth]) {
     Object.assign(this, {
@@ -317,8 +347,8 @@ export class MeshPrimitiveGrid {
     return new THREE.PlaneGeometry(
       this.sx.compute(),
       this.sy.compute(),
-      this.vx.compute(),
-      this.vy.compute()
+      this.vx.compute()-1,
+      this.vy.compute()-1
     );
   }
 }

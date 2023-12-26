@@ -28,6 +28,7 @@ export const nodeTypes = {
   ],
   "Mesh Primitives": [
     { name: "Cube", type: "MESH_PRIMITIVE_CUBE" },
+    { name: "Line", type: "MESH_PRIMITIVE_LINE" },
     { name: "Cylinder", type: "MESH_PRIMITIVE_CYLINDER" },
     { name: "UV Sphere", type: "MESH_PRIMITIVE_UV_SPHERE" },
     { name: "Grid", type: "MESH_PRIMITIVE_GRID" },
@@ -78,6 +79,10 @@ export const nodeComponentTypes = {
     outputs: [0],
   }),
   MESH_PRIMITIVE_CUBE: createNodeComponent({
+    inputs: [0, 1, 2, 3],
+    outputs: [0],
+  }),
+  MESH_PRIMITIVE_LINE: createNodeComponent({
     inputs: [0, 1, 2, 3],
     outputs: [0],
   }),

@@ -118,6 +118,8 @@ const nodeTypeToFn = {
   ),
   BOUNDING_BOX: applyNode(n.boundingBox, [0]),
   MESH_PRIMITIVE_CUBE: applyNode(n.meshPrimitiveCube, [0, 1, 2, 3]),
+  MESH_PRIMITIVE_LINE: applyNode(n.meshPrimitiveLine, [0, 1, 2, 3]),
+  
   MESH_PRIMITIVE_CYLINDER: applyNode(n.meshPrimitiveCylinder, [0, 1, 2, 3, 4]),
   MESH_PRIMITIVE_UV_SPHERE: applyNode(n.meshPrimitiveUVSphere, [0, 1, 2]),
   MESH_PRIMITIVE_GRID: applyNode(n.meshPrimitiveGrid, [0, 1, 2, 3]),

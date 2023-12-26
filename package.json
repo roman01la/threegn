@@ -17,9 +17,11 @@
     "react-dom": "^18.2.0",
     "reactflow": "^11.2.0",
     "style-loader": "^3.3.1",
-    "three": "^0.146.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "three": "^0.159.0"
   }
 }
