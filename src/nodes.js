@@ -536,7 +536,7 @@ export class MeshBooleanUnion {
           if(cm_geo.isInstancedBufferGeometry)
           {
             let geometry = convertInstancedToGeoemtry(cm_geo);
-            geometry.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            geometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([]), 1))
             geos.push(geometry);
           }
           else
@@ -582,7 +582,7 @@ export class MeshBooleanIntersect {
           if(cm_geo.isInstancedBufferGeometry)
           {
             let geometry = convertInstancedToGeoemtry(cm_geo);
-            geometry.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            geometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([]), 1))
             geos.push(geometry);
           }
           else
@@ -622,7 +622,7 @@ export class MeshBooleanDifferance {
     if(cm_geo.isInstancedBufferGeometry)
     {
       parent_geo=convertInstancedToGeoemtry(cm_geo);
-      parent_geo.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+      parent_geo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([]), 1))
             
     }
 
@@ -635,7 +635,7 @@ export class MeshBooleanDifferance {
           if(cm_geo.isInstancedBufferGeometry)
           {
             let geometry =convertInstancedToGeoemtry(cm_geo);
-            geometry.setAttribute('uv', new BufferAttribute(new Float32Array([]), 1))
+            geometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([]), 1))
             geos.push(geometry);
           }
           else
