@@ -86,6 +86,7 @@ const nodeTypeToFn = {
   "VECT_MATH/ADD": applyNode(n.vecAdd, [0, 1]),
   "VECT_MATH/SUBTRACT": applyNode(n.vecSubtract, [0, 1]),
   "VECT_MATH/DIVIDE": applyNode(n.vecDivide, [0, 1]),
+  "VECT_MATH/MULTIPLY": applyNode(n.vecMultiply, [0, 1]),
 
   MATH: (node) =>
     _evaluateNode([{ ...node, type: `MATH/${node.operation}` }, 0]),
@@ -130,7 +131,6 @@ const nodeTypeToFn = {
     n.joinGeometry(readValue(node, 0).map((nd) => _evaluateNode(nd))),
   
   MESH_BOOLEAN: (node) =>{
-    console.log(node,"...");
     return _evaluateNode([{ ...node, type: `MESH_BOOLEAN/${node.operation}` }, 0])},
   "MESH_BOOLEAN/UNION": (node) =>
   n.meshBooleanUnion(_evaluateNode(readValue(node, 0)),readValue(node, 1).map((nd) => _evaluateNode(nd)),_evaluateNode(readValue(node, 2)),_evaluateNode(readValue(node, 3))),

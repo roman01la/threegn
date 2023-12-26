@@ -92,6 +92,7 @@ export const logarithm = createMathOperation(
 export const vecAdd = createMathOperation((a, b) => a.add(b));
 export const vecSubtract = createMathOperation((a, b) => a.sub(b));
 export const vecDivide = createMathOperation((a, b) => a.divide(b));
+export const vecMultiply = createMathOperation((a, b) => a.multiply(b));
 
 // Utilities
 export class MapRange {
@@ -285,7 +286,7 @@ export class MeshPrimitiveLine {
 
     for (let i = 0; i < cn; i++) {
       let point =  new THREE.Vector3( (((ex*i)+(sx*(cn-1-i)))/(cn-1)), (((ey*i)+(sy*(cn-1-i)))/(cn-1)),(((ez*i)+(sz*(cn-1-i)))/(cn-1))) ;
-      console.log(point);
+      // console.log(point);
       points.push(point );
       // points.push( new THREE.Vector3( ex, ey, ez ) );
     }
@@ -454,7 +455,7 @@ export class JoinGeometry {
         
 
         }
-        console.log(geos);
+        // console.log(geos);
 
         const joined_geometry = BufferGeometryUtils.mergeGeometries( geos );
       return joined_geometry;
@@ -470,7 +471,7 @@ function unionGeometries(geos){
     let tobe_joined_geometry = new Brush(geos[i]);
     tobe_joined_geometry.updateMatrixWorld();
     
-    console.log(joined_geometry,tobe_joined_geometry);
+    // console.log(joined_geometry,tobe_joined_geometry);
             
     joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, ADDITION );
   }
@@ -487,7 +488,7 @@ function differanceGeometries(geo,geos){
     let tobe_joined_geometry = new Brush(geos[i]);
     tobe_joined_geometry.updateMatrixWorld();
     
-    console.log(joined_geometry,tobe_joined_geometry);
+    // console.log(joined_geometry,tobe_joined_geometry);
             
     joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, SUBTRACTION );
   }
@@ -502,7 +503,7 @@ function intersectGeometries(geos){
       let tobe_joined_geometry = new Brush(geos[i]);
       tobe_joined_geometry.updateMatrixWorld();
       
-      console.log(joined_geometry,tobe_joined_geometry);
+      // console.log(joined_geometry,tobe_joined_geometry);
               
       joined_geometry = evaluator.evaluate( joined_geometry, tobe_joined_geometry, INTERSECTION );
     }
@@ -659,7 +660,7 @@ export class MeshBooleanDifferance {
     }
 }
 export const meshBooleanDifferance = (...args) => { 
-  console.log(args,'args');
+  // console.log(args,'args');
   return new MeshBooleanDifferance(args[0],args[1],args[2],args[3])};
 
 
@@ -859,9 +860,12 @@ export class Transform {
     if (!geometry) {
       return;
     }
+    let three_rot = this.rotation.compute();
+    console.log(three_rot);
     const m4 = new THREE.Matrix4().compose(
       this.translation.compute(),
-      vec3ToQuaternion(this.rotation.compute()),
+      vec3ToQuaternion(new THREE.Vector3(three_rot.x,three_rot.z,three_rot.y)),
+      // vec3ToQuaternion(three_rot),
       this.scale.compute()
     );
     return geometry.applyMatrix4(m4);
