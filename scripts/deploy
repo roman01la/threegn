@@ -1,8 +1,0 @@
-#!/bin/sh
-
-yarn build
-rm -rf www
-mkdir www
-cp -r dist/main.js whats-new fonts defaults resources/* .vercel www/
-cd www
-vercel deploy --prod
